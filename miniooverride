@@ -1,0 +1,184 @@
+tenant:
+  # Tenant name
+  name: myminio
+  
+  # Image configuration
+  image:
+    repository: quay.io/minio/minio
+    tag: RELEASE.2024-10-02T17-50-41Z
+    pullPolicy: IfNotPresent
+
+  # Image pull secret (if any)
+  imagePullSecret: []
+
+  # Kubernetes scheduler
+  scheduler: {}
+
+  # MinIO environment variables configuration
+  configuration:
+    name: myminio-env-configuration
+
+  # Config secret for MinIO root user
+  configSecret:
+    name: myminio-env-configuration
+    accessKey: minio
+    secretKey: minio123
+
+  # Pools configuration
+  pools:
+    - servers: 4
+      name: pool-0
+      volumesPerServer: 4
+      size: 10Gi
+      storageAnnotations: {}
+      annotations: {}
+      labels: {}
+      tolerations: []
+      nodeSelector: {}
+      affinity: {}
+      resources: {}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+        runAsNonRoot: true
+      containerSecurityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
+
+  # Mount path configuration
+  mountPath: /export
+  subPath: /data
+
+  # Prometheus scraping configuration
+  metrics:
+    enabled: false
+    port: 9000
+    protocol: http
+
+  # TLS certificates
+  certificate:
+    externalCaCertSecret: []
+    externalCertSecret: []
+    requestAutoCert: true
+    certConfig: {}
+
+  # MinIO features
+  features:
+    bucketDNS: false
+    domains: {}
+    enableSFTP: false
+
+  # Buckets to create
+  buckets: []
+
+  # MinIO users
+  users: []
+
+  # Pod management policy
+  podManagementPolicy: Parallel
+
+  # Liveness, readiness, and startup probes
+  liveness: {}
+  readiness: {}
+  startup: {}
+
+  # Lifecycle hooks
+  lifecycle: {}
+
+  # Expose MinIO and Console services
+  exposeServices: {}
+
+  # Service account name
+  serviceAccountName: ""
+
+  # Prometheus operator configuration
+  prometheusOperator: false
+
+  # Logging configuration
+  logging: {}
+
+  # Service metadata
+  serviceMetadata: {}
+
+  # Additional environment variables for MinIO container
+  env: []
+
+  # Priority class for MinIO pods
+  priorityClassName: ""
+
+  # Additional volumes configuration
+  additionalVolumes: []
+
+  # Additional volume mounts configuration
+  additionalVolumeMounts: []
+
+  # KES configuration (optional)
+  # kes:
+  #   image:
+  #     repository: quay.io/minio/kes
+  #     tag: 2024-09-11T07-22-50Z
+  #     pullPolicy: IfNotPresent
+  #   env: []
+  #   replicas: 2
+  #   configuration: |
+  #     address: :7373
+  #     tls:
+  #       key: /tmp/kes/server.key
+  #       cert: /tmp/kes/server.crt
+  #     admin:
+  #       identity: ${MINIO_KES_IDENTITY}
+  #     cache:
+  #       expiry:
+  #         any: 5m0s
+  #         unused: 20s
+  #     log:
+  #       error: on
+  #       audit: off
+  #     keystore:
+  #       vault:
+  #         endpoint: "http://vault.default.svc.cluster.local:8200"
+  #         namespace: ""
+  #         prefix: "my-minio"
+  #         approle:
+  #           id: "<YOUR APPROLE ID HERE>"
+  #           secret: "<YOUR APPROLE SECRET ID HERE>"
+  #           retry: 15s
+  #         tls:
+  #           key: ""
+  #           cert: ""
+  #           ca: ""
+  #         status:
+  #           ping: 10s
+  #   imagePullPolicy: "IfNotPresent"
+  #   externalCertSecret: null
+  #   clientCertSecret: null
+  #   keyName: ""
+  #   resources: {}
+  #   nodeSelector: {}
+  #   affinity:
+  #     nodeAffinity: {}
+  #     podAffinity: {}
+  #     podAntiAffinity: {}
+  #   tolerations: []
+  #   annotations: {}
+  #   labels: {}
+  #   serviceAccountName: ""
+  #   securityContext:
+  #     runAsUser: 1000
+  #     runAsGroup: 1000
+  #     runAsNonRoot: true
+  #     fsGroup: 1000
+  #   containerSecurityContext:
+  #     runAsUser: 1000
+  #     runAsGroup: 1000
+  #     runAsNonRoot: true
+  #     fsGroup: 1000
